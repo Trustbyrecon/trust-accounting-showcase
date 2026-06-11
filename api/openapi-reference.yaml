@@ -1,0 +1,461 @@
+openapi: "3.1.0"
+info:
+  title: Trust Accounting API
+  version: "1.0.0"
+  description: |
+    Trust Accounting API v1  — orchestrates TBN-1 trust-accounting-core
+    builders via domain adapters. Observe-only; no persistence, no execution authority.
+
+    Supported domains: financial, healthcare, legal, cyber
+    Version: TBN-1 (frozen)
+    RFC-001: unchanged
+
+servers:
+  - url: /api/trust-accounting
+    description: Next.js API routes (relative)
+
+tags:
+  - name: receipt
+    description: Single-posture Trust Receipt (TBN-1.1)
+  - name: diagnostics
+    description: Root-cause diagnostics + growth opportunities (TBN-1.9 / TBN-1.10)
+  - name: report
+    description: Full pipeline report — mirrors playground export
+
+paths:
+  /receipt:
+    post:
+      operationId: createTrustReceipt
+      summary: Generate a Trust Receipt
+      description: |
+        Returns a single-posture TrustReceiptReport (TBN-1.1) for the given
+        domain and scope. Calls the appropriate adapter without any persistence
+        or execution side effects.
+      tags: [receipt]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReceiptRequest"
+            examples:
+              healthcare:
+                summary: Healthcare clinical_assistant
+                value:
+                  domain: healthcare
+                  scope: clinical_assistant
+                  evidence:
+                    policyAdherence: 88
+                    escalationAccuracy: 82
+                    calibrationDelta: -1.5
+                    safetyIncidents: 5
+                    survivabilityScore: 79
+                    reviewCompliance: 91
+      responses:
+        "200":
+          description: Trust Receipt generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReceiptResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/PipelineError"
+
+  /diagnostics:
+    post:
+      operationId: createTrustDiagnostics
+      summary: Generate Trust Diagnostics
+      description: |
+        Returns TrustGrowthDiagnosticsReport (TBN-1.10) and
+        TrustGrowthOpportunitiesReport (TBN-1.9) for the given domain.
+        Supply previousEvidence for movement context (TBN-1.6).
+      tags: [diagnostics]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosticsRequest"
+            examples:
+              healthcare:
+                summary: Healthcare with previous snapshot
+                value:
+                  domain: healthcare
+                  scope: clinical_assistant
+                  evidence:
+                    policyAdherence: 88
+                    escalationAccuracy: 82
+                    calibrationDelta: -1.5
+                    safetyIncidents: 5
+                    survivabilityScore: 79
+                    reviewCompliance: 91
+                  previousEvidence:
+                    policyAdherence: 75
+                    escalationAccuracy: 70
+                    calibrationDelta: -3.0
+                    safetyIncidents: 12
+                    survivabilityScore: 65
+                    reviewCompliance: 80
+      responses:
+        "200":
+          description: Diagnostics generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosticsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/PipelineError"
+
+  /report:
+    post:
+      operationId: createTrustReport
+      summary: Generate Full Trust Report
+      description: |
+        Full pipeline — mirrors playground export JSON structure.
+        Returns _meta, receipt, comparison, movement, timeline, opportunities,
+        diagnostics in a single call.
+
+        Optional:
+        - previousEvidence: enables movement delta (TBN-1.6)
+        - receiptHistory[]: enables momentum timeline (TBN-1.8, financial domain only)
+      tags: [report]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+            examples:
+              healthcare_full:
+                summary: Healthcare full report
+                value:
+                  domain: healthcare
+                  scope: clinical_assistant
+                  evidence:
+                    policyAdherence: 88
+                    escalationAccuracy: 82
+                    calibrationDelta: -1.5
+                    safetyIncidents: 5
+                    survivabilityScore: 79
+                    reviewCompliance: 91
+      responses:
+        "200":
+          description: Full report generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "422":
+          $ref: "#/components/responses/PipelineError"
+
+components:
+  schemas:
+    # ─── Domain enum ─────────────────────────────────────────────────────────
+    Domain:
+      type: string
+      enum: [financial, healthcare, legal, cyber]
+      description: |
+        Trust accounting domain.
+        - financial: ExposureGuardEvidence (scopes: aggressive, balanced, defensive, cash_heavy)
+        - healthcare: HealthcareTrustEvidence (scopes: clinical_assistant, triage_assistant, care_navigator, documentation_agent)
+        - legal: LegalTrustEvidence (scopes: legal_assistant)
+        - cyber: CyberTrustEvidence (scopes: cyber_defender)
+
+    # ─── Evidence shapes ─────────────────────────────────────────────────────
+    HealthcareEvidence:
+      type: object
+      required:
+        - policyAdherence
+        - escalationAccuracy
+        - calibrationDelta
+        - safetyIncidents
+        - survivabilityScore
+        - reviewCompliance
+      properties:
+        policyAdherence:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Policy adherence rate (0–100) — maps to Coverage factor
+        escalationAccuracy:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Human escalation accuracy rate (0–100) — maps to Accuracy factor
+        calibrationDelta:
+          type: number
+          description: Confidence calibration delta (e.g. -1.5 = 1.5pts overconfident) — maps to Calibration factor
+        safetyIncidents:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Safety incident rate (0=none, 100=many), inverted — maps to Drift factor
+        survivabilityScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Long-run operational stability (0–100) — maps to Survivability factor
+        reviewCompliance:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Review compliance rate (0–100) — maps to Trust Lock factor
+
+    LegalEvidence:
+      type: object
+      required:
+        - citationReliability
+        - escalationAccuracy
+        - hallucinationRate
+        - policyAdherence
+        - sourceFreshness
+        - reviewCompliance
+      properties:
+        citationReliability:
+          type: number
+          minimum: 0
+          maximum: 100
+        escalationAccuracy:
+          type: number
+          minimum: 0
+          maximum: 100
+        hallucinationRate:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Inverted (higher = worse calibration)
+        policyAdherence:
+          type: number
+          minimum: 0
+          maximum: 100
+        sourceFreshness:
+          type: number
+          minimum: 0
+          maximum: 100
+        reviewCompliance:
+          type: number
+          minimum: 0
+          maximum: 100
+
+    CyberEvidence:
+      type: object
+      required:
+        - controlCoverage
+        - detectionAccuracy
+        - alertCalibrationDelta
+        - controlDrift
+        - postureStability
+        - reviewCompliance
+      properties:
+        controlCoverage:
+          type: number
+          minimum: 0
+          maximum: 100
+        detectionAccuracy:
+          type: number
+          minimum: 0
+          maximum: 100
+        alertCalibrationDelta:
+          type: number
+          description: Signed calibration delta
+        controlDrift:
+          type: string
+          description: CalibrationDriftTrend string
+        postureStability:
+          type: number
+          minimum: 0
+          maximum: 100
+        reviewCompliance:
+          type: number
+          minimum: 0
+          maximum: 100
+
+    # ─── Request bodies ───────────────────────────────────────────────────────
+    ReceiptRequest:
+      type: object
+      required: [domain, scope, evidence]
+      properties:
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+          description: Scope valid for the given domain
+        evidence:
+          type: object
+          description: Domain-specific evidence fields
+
+    DiagnosticsRequest:
+      type: object
+      required: [domain, scope, evidence]
+      properties:
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+        evidence:
+          type: object
+        previousEvidence:
+          type: object
+          nullable: true
+          description: Optional prior-period evidence for movement context
+
+    ReportRequest:
+      type: object
+      required: [domain, scope, evidence]
+      properties:
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+        evidence:
+          type: object
+        previousEvidence:
+          type: object
+          nullable: true
+        receiptHistory:
+          type: array
+          items:
+            type: object
+          nullable: true
+          description: 2+ entries enable Trust Momentum Timeline (financial domain only)
+
+    # ─── Response bodies ──────────────────────────────────────────────────────
+    TrustReceiptFactor:
+      type: object
+      properties:
+        factorId:
+          type: string
+        label:
+          type: string
+        weight:
+          type: number
+        rawScore:
+          type: number
+        contribution:
+          type: number
+        status:
+          type: string
+
+    TrustReceiptReport:
+      type: object
+      properties:
+        trustIndex:
+          type: number
+          description: Aggregate trust index (0–100)
+        posture:
+          type: string
+        factors:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrustReceiptFactor"
+        aliethiaSummary:
+          type: string
+        healthLabel:
+          type: string
+
+    ReceiptResponse:
+      type: object
+      properties:
+        trustIndex:
+          type: number
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+        receipt:
+          $ref: "#/components/schemas/TrustReceiptReport"
+        generatedAt:
+          type: string
+          format: date-time
+
+    DiagnosticsResponse:
+      type: object
+      properties:
+        trustIndex:
+          type: number
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+        diagnostics:
+          type: object
+          description: TrustGrowthDiagnosticsReport (TBN-1.10)
+        growthOpportunities:
+          type: object
+          description: TrustGrowthOpportunitiesReport (TBN-1.9)
+        generatedAt:
+          type: string
+          format: date-time
+
+    ReportMeta:
+      type: object
+      properties:
+        generator:
+          type: string
+        track:
+          type: string
+        domain:
+          $ref: "#/components/schemas/Domain"
+        scope:
+          type: string
+        tbn:
+          type: string
+        anchor:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        note:
+          type: string
+
+    ReportResponse:
+      type: object
+      properties:
+        _meta:
+          $ref: "#/components/schemas/ReportMeta"
+        receipt:
+          $ref: "#/components/schemas/TrustReceiptReport"
+          nullable: true
+        comparison:
+          type: object
+          description: TrustReceiptComparisonReport (TBN-1.5)
+        movement:
+          type: object
+          nullable: true
+          description: TrustMovementDeltaReport (TBN-1.6)
+        timeline:
+          type: object
+          nullable: true
+          description: TrustMomentumTimelineReport (TBN-1.8)
+        opportunities:
+          type: object
+          description: TrustGrowthOpportunitiesReport (TBN-1.9)
+        diagnostics:
+          type: object
+          description: TrustGrowthDiagnosticsReport (TBN-1.10)
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Invalid domain, scope, or missing required fields
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    PipelineError:
+      description: Evidence shape incompatible with selected adapter
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
