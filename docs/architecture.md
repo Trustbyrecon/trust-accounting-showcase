@@ -2,7 +2,7 @@
 
 High-level system design for **Trust Accounting**, the flagship application of the Recon trust runtime. This document is a **projection**—technical depth on the Trust Accounting layer only.
 
-For the developer-first discovery narrative (Trust Interval, runtime architecture, maturity map), see [`README.md`](../README.md). For the public Trust Interval philosophy, see [recon.ai/homepage/trust-interval](https://recon.ai/homepage/trust-interval).
+For the developer-first discovery narrative (Trust Interval, runtime architecture, maturity map), see [`README.md`](../README.md). For the public Trust Interval philosophy, see [reconai.net/homepage/trust-interval](https://reconai.net/homepage/trust-interval).
 
 This document intentionally omits internal monorepo paths, enterprise strategy, and long implementation backlogs.
 

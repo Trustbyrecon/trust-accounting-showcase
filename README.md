@@ -48,7 +48,7 @@ Learn
 
 Trust Accounting is where those answers become **measurable trust posture**—decomposed trust indices, factor contributions, movement deltas, and diagnostics operators can read without opening model weights.
 
-Learn more: [The Trust Interval](https://recon.ai/homepage/trust-interval)
+Learn more: [The Trust Interval](https://reconai.net/homepage/trust-interval)
 
 ---
 
@@ -89,7 +89,7 @@ The evidence platform connects live missions to the trust records Trust Accounti
 
 ## Screenshots
 
-Capture these from the live deployment at [recon.ai](https://recon.ai) when publishing visual assets. Placeholders keep the repo clone-friendly without binary files.
+Capture these from the live deployment at [reconai.net](https://reconai.net) when publishing visual assets. Placeholders keep the repo clone-friendly without binary files.
 
 | Surface | Placeholder |
 |---------|-------------|
@@ -111,8 +111,8 @@ This README is the aggregate. Deeper projections live elsewhere—follow links i
 | Resource | Link |
 |----------|------|
 | Trust Accounting architecture | [`docs/architecture.md`](docs/architecture.md) |
-| The Trust Interval | [recon.ai/homepage/trust-interval](https://recon.ai/homepage/trust-interval) |
-| Public website | [recon.ai](https://recon.ai) |
+| The Trust Interval | [reconai.net/homepage/trust-interval](https://reconai.net/homepage/trust-interval) |
+| Public website | [reconai.net](https://reconai.net) |
 | LangChain adapter | [Trustbyrecon/reconai-langchain](https://github.com/Trustbyrecon/reconai-langchain) |
 | LangChain quickstart | [Trustbyrecon/reconai-langchain-quickstart](https://github.com/Trustbyrecon/reconai-langchain-quickstart) |
 
@@ -122,7 +122,7 @@ This README is the aggregate. Deeper projections live elsewhere—follow links i
 |----------|------|
 | TypeScript examples | [`examples/`](examples/) |
 | API snippets + OpenAPI excerpt | [`api/`](api/) — [`openapi-reference.yaml`](api/openapi-reference.yaml), [`receipt.sh`](api/receipt.sh), [`diagnostics.sh`](api/diagnostics.sh), [`report.sh`](api/report.sh) |
-| Trust Accounting Playground | [recon.ai/trust-accounting/playground](https://recon.ai/trust-accounting/playground) *(public route when deployed)* |
+| Trust Accounting Playground | [reconai.net/trust-accounting/playground](https://reconai.net/trust-accounting/playground) *(public route when deployed)* |
 
 ---
 
