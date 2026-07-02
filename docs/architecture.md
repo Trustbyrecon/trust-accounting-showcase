@@ -1,6 +1,16 @@
 # Trust Accounting — Architecture
 
-High-level system design for the Trust Accounting platform. This document intentionally omits internal monorepo paths, enterprise strategy, and implementation roadmaps.
+High-level system design for **Trust Accounting**, the flagship application of the Recon trust runtime. This document is a **projection**—technical depth on the Trust Accounting layer only.
+
+For the developer-first discovery narrative (Trust Interval, runtime architecture, maturity map), see [`README.md`](../README.md). For the public Trust Interval philosophy, see [recon.ai/homepage/trust-interval](https://recon.ai/homepage/trust-interval).
+
+This document intentionally omits internal monorepo paths, enterprise strategy, and long implementation backlogs.
+
+## Position in the Recon Runtime
+
+Trust Accounting is the verification layer on Recon's evidence spine. It consumes **Evidence (GhostLog)** lineage and **Trust Context (Trust Graph)** topology, then produces **Verifiable Audit Artifacts**—decomposed trust receipts, movement deltas, and diagnostics operators can read without opening model weights.
+
+Execution authority remains in **Runtime Decisions (Mission Runtime)**; learning compounds through **Organizational Learning (Pattern Library)** and **Decision Intelligence (Alie)**. Trust Accounting measures and explains; it does not execute.
 
 ## Problem
 
@@ -88,7 +98,7 @@ All Trust Receipt outputs include advisory semantics:
 - No policy mutation
 - No persistence in the API v1 surface
 
-Execution authority remains in the host application's governance layer (Trust Runtime, approval flows, etc.).
+Execution authority remains in the host application's governance layer (Mission Runtime, approval flows, etc.).
 
 ## Agent integration (separate public repos)
 
@@ -107,6 +117,6 @@ These integrate at the orchestration layer; Trust Accounting core stays domain-a
 
 ## Further reading in this repo
 
-- [`README.md`](../README.md) — portfolio overview
+- [`README.md`](../README.md) — aggregate runtime narrative
 - [`examples/`](../examples/) — adapter usage by domain
 - [`api/`](../api/) — HTTP integration snippets

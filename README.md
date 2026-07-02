@@ -1,272 +1,148 @@
-# Trust Accounting — Portfolio Showcase
+# Trust Accounting Showcase
 
-**Evidence in. Auditable trust out.**
+## Executive Summary
 
-Trust Accounting is a domain-agnostic platform for turning operational signals into **explainable trust receipts**, **movement deltas**, **momentum timelines**, **growth opportunities**, and **root-cause diagnostics**. It was designed for regulated AI deployments where “the model scored 0.82” is not enough—you need factor decomposition, audit trails, and operator-readable narratives.
+Recon Runtime is the trust runtime for AI systems.
 
-This repository is a **recruiter-friendly portfolio slice**: architecture, SDK patterns, API examples, and vertical adapters. It contains no internal strategy docs, pricing, or proprietary monorepo contents.
+Trust Accounting is the flagship implementation.
+
+It helps organizations detect, explain, prove, recover, and learn from AI decisions through auditable evidence.
+
+This repository is the public **aggregate** for that story. Architecture notes, SDK examples, API snippets, and demo links are **projections**—sanitized artifacts you can clone, run, and share without internal monorepo access.
 
 ---
 
-## What I Built
+## Why this repository exists
 
-| Layer | Responsibility |
-|-------|----------------|
-| **Core SDK** (`@reconai/trust-accounting-core`) | Frozen TBN-1 builders: receipt, comparison, movement, timeline, opportunities, diagnostics |
-| **Domain adapters** | Financial, Healthcare, Legal, Cyber — each implements `TrustEvidenceAdapter` |
-| **HTTP API** | Observe-only REST surface (`/receipt`, `/diagnostics`, `/report`) |
-| **Playground** | Browser-native pipeline — paste evidence, export JSON, no backend required |
-| **Agent integration** | Python LangChain adapter + progressive quickstart (public repos) |
+If you landed here expecting the full Recon production codebase, this is intentional.
 
-**Design principle:** adapters translate domain evidence → six universal trust factors. Core never imports a vertical. Formulas stay frozen; new domains ship as adapter packs.
+**Trust Accounting Showcase** is the public home for Recon Runtime's Trust Accounting platform: architecture concepts, Trust Interval vocabulary, SDK patterns, API examples, and vertical adapter demos. It mirrors how the runtime itself works—one aggregate, many projections—without shipping internal strategy, pricing, or proprietary monorepo contents.
+
+Use this repo to **discover** how Recon thinks about trust, **run** sanitized examples, and **integrate** with public SDK and API surfaces. Production wiring lives in your deployment and in companion public repos (LangChain adapters, npm packages when published).
+
+---
+
+## Trust Interval
+
+Every trustworthy AI system must answer five questions. Recon maps them to runtime objects through the **Trust Interval**—a continuous lifecycle from detection through learning:
+
+```
+Detect
+↓
+Explain
+↓
+Prove
+↓
+Recover
+↓
+Learn
+```
+
+| Phase | Question | Public language | Runtime object |
+|-------|----------|-----------------|----------------|
+| **Detect** | What happened? | Evidence | GhostLog |
+| **Explain** | Why did it happen? | Trust Context | Trust Graph |
+| **Prove** | Can I prove it? | Verifiable Audit Artifacts | AI Receipts / Trust Statements |
+| **Recover** | What should happen next? | Runtime Decisions | Mission Runtime |
+| **Learn** | Will this happen again? | Organizational Learning | Pattern Library |
+
+Trust Accounting is where those answers become **measurable trust posture**—decomposed trust indices, factor contributions, movement deltas, and diagnostics operators can read without opening model weights.
+
+Learn more: [The Trust Interval](https://recon.ai/homepage/trust-interval)
+
+---
+
+## Runtime Architecture
+
+Recon's runtime spine connects execution, evidence, context, learning, and operator intelligence. Each block below is a runtime object with public language operators and reviewers can share.
+
+**Mission Runtime** — Policy-governed execution, recovery, and bounded authority at mission scope. Runtime Decisions stay receipt-backed: retry, reprompt, and containment paths are governed, not improvised.
+
+**GhostLog (Evidence)** — Signed step lineage—the spine every product projects from. Every action is visible before failures compound, giving operators and auditors a durable evidence trail.
+
+**Trust Graph (Trust Context)** — Relationships, topology, and cross-mission lineage—not opaque scores alone. Trust posture becomes portable across handoffs and review surfaces.
+
+**Pattern Library (Organizational Learning)** — Mission outcomes distilled into retained patterns so teams learn without amnesia. Completed missions feed a compounding evidence corpus the runtime can query on the next decision.
+
+**Inspect Signal** — Outside-world signals enter the runtime through a structured inspect workflow: normalize inputs, run evidence-grounded analysis, and route commander review before strategic memory updates.
+
+**Strategic Portfolio** — One aggregate view of strategic signals, impact, and historical similarity—many projections for operators tracking what matters across missions and time horizons.
+
+---
+
+## Maturity Map
+
+| Capability              | Status         |
+| ----------------------- | -------------- |
+| Mission Runtime         | ✅ Stable       |
+| Trust Accounting        | ✅ Stable       |
+| GhostLog                | ✅ Stable       |
+| TrustGraph              | ✅ Stable       |
+| Pattern Library         | ✅ Operational  |
+| Inspect Signal          | ✅ Operational  |
+| Strategic Portfolio     | ✅ Operational  |
+| Organizational Learning | 🟢 Compounding |
+
+The evidence platform connects live missions to the trust records Trust Accounting produces—**Unified Timeline**, **Inspect Signal**, **Strategic Portfolio**, and evidence-derived learning share the same GhostLog spine.
+
+---
+
+## Screenshots
+
+Capture these from the live deployment at [recon.ai](https://recon.ai) when publishing visual assets. Placeholders keep the repo clone-friendly without binary files.
+
+| Surface | Placeholder |
+|---------|-------------|
+| Homepage hero | ![Recon homepage — AI execution map and Trust Interval hero](docs/screenshots/homepage-hero.png) |
+| Mission Runtime | ![Mission Runtime — policy-governed execution and recovery](docs/screenshots/mission-runtime.png) |
+| Unified Timeline | ![Unified Timeline — cross-mission evidence timeline](docs/screenshots/unified-timeline.png) |
+| Inspect Signal | ![Inspect Signal — outside-world signal inspection workflow](docs/screenshots/inspect-signal.png) |
+| Strategic Portfolio | ![Strategic Portfolio — strategic signal aggregate view](docs/screenshots/strategic-portfolio.png) |
+| Pattern Library | ![Pattern Library — organizational learning from completed missions](docs/screenshots/pattern-library.png) |
+
+Add PNG or WebP files under `docs/screenshots/` with the filenames above when ready.
 
 ---
 
 ## Architecture
 
-```mermaid
-flowchart TB
-  subgraph domains["Domain evidence"]
-    FIN[Financial / Exposure Guard]
-    HC[Healthcare clinical signals]
-    LEG[Legal research signals]
-    CYB[Cyber SOC signals]
-  end
+This README is the aggregate. Deeper projections live elsewhere—follow links instead of duplicating diagrams here.
 
-  subgraph adapters["TrustEvidenceAdapter packs"]
-    A1["@reconai/trust-financial"]
-    A2["@reconai/trust-healthcare"]
-    A3["@reconai/trust-legal"]
-    A4["@reconai/trust-cyber"]
-  end
+| Resource | Link |
+|----------|------|
+| Trust Accounting architecture | [`docs/architecture.md`](docs/architecture.md) |
+| The Trust Interval | [recon.ai/homepage/trust-interval](https://recon.ai/homepage/trust-interval) |
+| Public website | [recon.ai](https://recon.ai) |
+| LangChain adapter | [Trustbyrecon/reconai-langchain](https://github.com/Trustbyrecon/reconai-langchain) |
+| LangChain quickstart | [Trustbyrecon/reconai-langchain-quickstart](https://github.com/Trustbyrecon/reconai-langchain-quickstart) |
 
-  subgraph core["@reconai/trust-accounting-core (TBN-1 frozen)"]
-    R[buildTrustReceipt]
-    C[buildTrustReceiptComparison]
-    M[buildTrustMovementDelta]
-    T[buildTrustMomentumTimeline]
-    O[buildTrustGrowthOpportunities]
-    D[buildTrustGrowthDiagnostics]
-  end
+### Showcase artifacts
 
-  subgraph surfaces["Surfaces"]
-    PG[Playground — client-side]
-    API[Trust Accounting API v1]
-    AG[Agent runtimes — LangChain / TS SDK]
-  end
-
-  FIN --> A1
-  HC --> A2
-  LEG --> A3
-  CYB --> A4
-
-  A1 & A2 & A3 & A4 --> R
-  R --> C --> M
-  R --> T
-  R --> O --> D
-
-  core --> PG
-  core --> API
-  core --> AG
-```
-
-See [`docs/architecture.md`](docs/architecture.md) for a deeper (still high-level) walkthrough.
+| Artifact | Link |
+|----------|------|
+| TypeScript examples | [`examples/`](examples/) |
+| API snippets + OpenAPI excerpt | [`api/`](api/) — [`openapi-reference.yaml`](api/openapi-reference.yaml), [`receipt.sh`](api/receipt.sh), [`diagnostics.sh`](api/diagnostics.sh), [`report.sh`](api/report.sh) |
+| Trust Accounting Playground | [recon.ai/trust-accounting/playground](https://recon.ai/trust-accounting/playground) *(public route when deployed)* |
 
 ---
 
-## Trust Accounting Overview
+## Design Principles
 
-Every trust receipt answers four operator questions:
+Recon is built around four architectural principles:
 
-1. **What is the trust index?** — Single posture score (0–100) with health label.
-2. **Why this score?** — Six factor contributions: coverage, accuracy, calibration, drift, survivability, trust lock.
-3. **What changed?** — Movement delta vs. a prior evidence snapshot.
-4. **What should we fix?** — Ranked growth opportunities with root-cause diagnostics.
-
-Outputs are **advisory only** (`carriesExecutionAuthority: false`). The platform observes and explains; execution authority stays in your governance layer.
-
-### Sample receipt (truncated)
-
-```json
-{
-  "trustIndex": 88,
-  "posture": "clinical_assistant",
-  "trustIndexScope": "posture",
-  "factors": [
-    { "id": "coverage", "label": "Coverage", "rawValue": "88%", "contribution": 22 },
-    { "id": "accuracy", "label": "Accuracy", "rawValue": "82%", "contribution": 20 },
-    { "id": "calibration", "label": "Calibration", "rawValue": "-1.5", "contribution": 18 },
-    { "id": "drift", "label": "Drift", "rawValue": "Stable", "contribution": 14 },
-    { "id": "survivability", "label": "Survivability", "rawValue": "79/100", "contribution": 14 },
-    { "id": "trust_lock", "label": "Trust Lock", "rawValue": "91/100", "contribution": 0 }
-  ],
-  "aliethiaSummary": "Clinical assistant posture is strong; calibration drift is the primary growth lever.",
-  "carriesExecutionAuthority": false
-}
-```
+* One aggregate, many projections.
+* Evidence before inference.
+* Fix aggregates, never projections.
+* Organizational learning compounds through completed missions.
 
 ---
 
-## Playground
+## Roadmap
 
-The Trust Accounting Playground runs the full pipeline **in the browser** — no API keys, no persistence.
-
-| Feature | Description |
-|---------|-------------|
-| Domain tabs | Financial · Healthcare · Legal · Cyber |
-| Evidence input | Paste JSON or load scenario presets |
-| Outputs | Receipt, comparison matrix, movement, timeline, opportunities, diagnostics |
-| Export | Downloadable JSON with `_meta` provenance block |
-
-**Live demo:** [recon.ai/trust-accounting/playground](https://recon.ai/trust-accounting/playground) *(public route when deployed)*
-
-> **Screenshots:** Add `docs/screenshots/playground-receipt.png`, `playground-diagnostics.png`, etc. when capturing from the live playground. Placeholders keep this repo clone-friendly without binary assets.
-
----
-
-## SDK Examples
-
-TypeScript examples live under [`examples/`](examples/). They mirror production adapter patterns; package names reflect the intended npm surface.
-
-| Example | Domain | File |
-|---------|--------|------|
-| Core pipeline | All | [`examples/sdk-core.ts`](examples/sdk-core.ts) |
-| Financial | Exposure / portfolio postures | [`examples/financial.ts`](examples/financial.ts) |
-| Healthcare | Clinical AI scopes | [`examples/healthcare.ts`](examples/healthcare.ts) |
-| Legal | Legal research assistant | [`examples/legal.ts`](examples/legal.ts) |
-| Cyber | SOC / detection AI | [`examples/cyber.ts`](examples/cyber.ts) |
-| Full diagnostics | Movement + opportunities | [`examples/diagnostics-pipeline.ts`](examples/diagnostics-pipeline.ts) |
-
-### Quick start (TypeScript)
-
-```typescript
-import { buildTrustReceipt, buildTrustGrowthDiagnostics } from "@reconai/trust-accounting-core";
-import { healthcareAdapter } from "@reconai/trust-healthcare";
-
-const evidence = {
-  policyAdherence: 88,
-  escalationAccuracy: 82,
-  calibrationDelta: -1.5,
-  safetyIncidents: 5,
-  survivabilityScore: 79,
-  reviewCompliance: 91,
-};
-
-const receipt = buildTrustReceipt(
-  healthcareAdapter.toReceiptParams(evidence, "clinical_assistant")
-);
-
-console.log(receipt?.trustIndex, receipt?.aliethiaSummary);
-```
-
-### Agent runtime integration (Python / LangChain)
-
-For wrapping LangChain agents with trust guards, GhostLog timelines, and recovery patterns:
-
-| Repo | Purpose |
-|------|---------|
-| [Trustbyrecon/reconai-langchain](https://github.com/Trustbyrecon/reconai-langchain) | Python adapter library |
-| [Trustbyrecon/reconai-langchain-quickstart](https://github.com/Trustbyrecon/reconai-langchain-quickstart) | Progressive examples `01` → `04` |
-
-The broader TypeScript agent SDK (`@reconai/sdk` on npm) complements Trust Accounting for step-level wrapping and mission telemetry.
-
----
-
-## API Examples
-
-Trust Accounting API v1 is **observe-only**: POST evidence, receive structured reports. No persistence, no side effects.
-
-| Endpoint | Returns |
-|----------|---------|
-| `POST /api/trust-accounting/receipt` | Single-posture Trust Receipt |
-| `POST /api/trust-accounting/diagnostics` | Growth opportunities + root-cause diagnostics |
-| `POST /api/trust-accounting/report` | Full pipeline (mirrors playground export) |
-
-OpenAPI spec shape: [`api/openapi-reference.yaml`](api/openapi-reference.yaml) *(sanitized excerpt)*
-
-Runnable snippets:
-
-- [`api/receipt.sh`](api/receipt.sh) — Healthcare receipt
-- [`api/diagnostics.sh`](api/diagnostics.sh) — Diagnostics with movement context
-- [`api/report.sh`](api/report.sh) — Full report export
-- [`api/fetch-examples.md`](api/fetch-examples.md) — `fetch` equivalents for Node/browser
-
-Replace `BASE_URL` with your deployment origin. Examples use synthetic evidence only.
-
----
-
-## Domain Adapters
-
-Each vertical maps **six operational signals** onto the universal six trust factors. Adapters own translation; core owns math.
-
-| Domain | Package | Scopes | Reference |
-|--------|---------|--------|-----------|
-| Financial | `@reconai/trust-financial` | aggressive, balanced, defensive, cash_heavy | Exposure Guard baseline |
-| Healthcare | `@reconai/trust-healthcare` | clinical_assistant, triage_assistant, care_navigator, documentation_agent | Clinical compliance |
-| Legal | `@reconai/trust-legal` | legal_assistant | Citation + hallucination monitoring |
-| Cyber | `@reconai/trust-cyber` | cyber_defender | SOC detection + review compliance |
-
-### Signal → factor pattern (Healthcare)
-
-| Clinical signal | Trust factor |
-|-----------------|--------------|
-| `policyAdherence` | Coverage |
-| `escalationAccuracy` | Accuracy |
-| `calibrationDelta` | Calibration |
-| `safetyIncidents` (inverted) | Drift |
-| `survivabilityScore` | Survivability |
-| `reviewCompliance` | Trust Lock |
-
-Legal and Cyber follow the same adapter contract with domain-specific semantics — see [`examples/`](examples/).
-
----
-
-## Audit Trails & Diagnostics
-
-Trust receipts integrate with **GhostLog-style audit timelines** via adapter names (`healthcare_ops`, `legal_ops`, `exposure_guard`, etc.). Each receipt is reproducible: same evidence + frozen TBN-1 anchor → same factor decomposition.
-
-**Diagnostics pipeline:**
-
-```
-TrustReceipt
-  → buildTrustGrowthOpportunities   (ranked levers)
-  → buildTrustGrowthDiagnostics     (root causes per lever)
-  → buildTrustMovementDelta         (when previousEvidence supplied)
-```
-
-This gives compliance and platform teams **explainability without opening the model weights**.
-
----
-
-## Repository Layout
-
-```
-trust-accounting-showcase/
-├── README.md                 ← you are here
-├── LICENSE                   ← MIT
-├── docs/
-│   └── architecture.md       ← high-level system design
-├── examples/                 ← sanitized TypeScript samples
-├── api/                      ← curl / fetch snippets + OpenAPI excerpt
-└── .gitignore
-```
-
----
-
-## Related Public Work
-
-| Surface | Link |
-|---------|------|
-| LangChain adapter | https://github.com/Trustbyrecon/reconai-langchain |
-| LangChain quickstart | https://github.com/Trustbyrecon/reconai-langchain-quickstart |
-| Company site | https://recon.ai |
-| Playground (when live) | https://recon.ai/trust-accounting/playground |
-
----
-
-## Status & Publishing
-
-This showcase documents work completed in the Trust Accounting SDK track (RFC-001, TBN-1 frozen at anchor `c2395bf6`). Core and adapter packages are implemented and tested in a private monorepo; **npm publication of `@reconai/trust-accounting-core` and vertical packs is planned** as a separate public mirror release (same pattern as the LangChain growth repos).
+- **Runtime stability** — Harden Mission Runtime, GhostLog, TrustGraph, and Trust Accounting as the frozen evidence spine.
+- **Organizational learning** — Expand Pattern Library retention and evidence-derived learning loops across missions.
+- **Enterprise integrations** — Deeper adapter packs, export surfaces, and deployment-ready SDK mirrors on public npm.
+- **Pattern intelligence** — Richer Inspect Signal and Strategic Portfolio projections grounded in completed mission evidence.
 
 ---
 
